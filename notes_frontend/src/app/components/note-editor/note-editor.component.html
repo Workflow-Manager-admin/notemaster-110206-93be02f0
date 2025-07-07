@@ -1,0 +1,34 @@
+<div class="editor-container" *ngIf="note || isNew; else noNoteSelected">
+  <div class="editor-header">
+    <input
+      type="text"
+      class="title-input"
+      [(ngModel)]="editingTitle"
+      maxlength="128"
+      placeholder="Note Title"
+      aria-label="Note Title"
+      required
+      autofocus
+    />
+    <div class="editor-actions">
+      <button class="btn" color="primary" (click)="onSave()">
+        <span *ngIf="isNew">Create</span>
+        <span *ngIf="!isNew">Save</span>
+      </button>
+      <button class="btn btn-light" (click)="onCancel()">Cancel</button>
+      <button *ngIf="!isNew" class="btn btn-delete" (click)="onDelete()">
+        Delete
+      </button>
+    </div>
+  </div>
+  <textarea
+    class="content-input"
+    [(ngModel)]="editingContent"
+    rows="15"
+    placeholder="Type your note here..."
+    aria-label="Note content"
+  ></textarea>
+</div>
+<ng-template #noNoteSelected>
+  <div class="empty-note-msg">Select a note or create a new one to get started.</div>
+</ng-template>

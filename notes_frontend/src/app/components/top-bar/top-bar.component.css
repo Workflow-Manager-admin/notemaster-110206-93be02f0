@@ -1,0 +1,45 @@
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--white);
+  border-bottom: 1px solid var(--divider);
+  padding: 0.75rem 2rem 0.75rem 2.4rem;
+  min-height: 52px;
+  box-shadow: 0 1px 5px 0 #f8fafd11;
+  position: sticky;
+  top: 0;
+  z-index: 12;
+}
+
+.top-bar-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.23rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+}
+
+.logo-dot {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-right: 0.8rem;
+  background: linear-gradient(135deg, var(--primary) 70%, var(--accent) 100%);
+}
+
+.top-bar-meta {
+  font-size: 1.01rem;
+  color: var(--secondary);
+  font-weight: 400;
+  letter-spacing: 0.17px;
+}
+.notes-count {
+  background: var(--muted);
+  color: var(--secondary);
+  border-radius: 1rem;
+  padding: 0.4em 0.7em;
+}

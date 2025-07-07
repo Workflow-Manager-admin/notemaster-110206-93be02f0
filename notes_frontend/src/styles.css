@@ -1,0 +1,57 @@
+:root {
+  --primary: #1976d2;
+  --secondary: #424242;
+  --accent: #ffb300;
+  --background: #fafbfc;
+  --white: #fff;
+  --text: #24292f;
+  --muted: #eee;
+  --radius: 0.75rem;
+  --divider: #ececec;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--background);
+  font-family: 'Inter', 'Segoe UI', 'Roboto', Arial, sans-serif;
+  color: var(--text);
+  box-sizing: border-box;
+}
+* {
+  box-sizing: inherit;
+}
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover, a:focus {
+  color: var(--accent);
+}
+button, input, textarea {
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+  border: none;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  background: var(--muted);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--divider);
+  border-radius: 5px;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--background);
+}

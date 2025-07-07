@@ -1,0 +1,32 @@
+<div class="app-shell">
+  <top-bar [totalNotes]="notes.length"></top-bar>
+  <div class="app-main-area">
+    <aside class="sidebar">
+      <note-list-sidebar
+        [notes]="filteredNotes"
+        [activeNoteId]="creatingNote ? null : selectedNoteId"
+        (selectNote)="onSelectNote($event)"
+        (createNote)="onCreateNote()"
+        (search)="onSearch($event)"
+      ></note-list-sidebar>
+    </aside>
+    <main class="editor-main">
+      <note-editor
+        *ngIf="creatingNote; else viewEditNote"
+        [note]="null"
+        [isNew]="true"
+        (save)="onSaveNewNote($event)"
+        (cancel)="onCancelEditing()"
+      ></note-editor>
+      <ng-template #viewEditNote>
+        <note-editor
+          [note]="selectedNote"
+          [isNew]="false"
+          (save)="onEditNote($event)"
+          (delete)="onDeleteNote()"
+          (cancel)="onCancelEditing()"
+        ></note-editor>
+      </ng-template>
+    </main>
+  </div>
+</div>
