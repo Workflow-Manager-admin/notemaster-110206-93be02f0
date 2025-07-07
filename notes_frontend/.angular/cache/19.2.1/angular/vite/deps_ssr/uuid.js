@@ -25,10 +25,13 @@ var validate_default = validate;
 // node_modules/uuid/dist/esm-node/stringify.js
 var byteToHex = [];
 for (let i = 0; i < 256; ++i) {
-  byteToHex.push((i + 256).toString(16).substr(1));
+  byteToHex.push((i + 256).toString(16).slice(1));
+}
+function unsafeStringify(arr, offset = 0) {
+  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
 }
 function stringify(arr, offset = 0) {
-  const uuid = (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
+  const uuid = unsafeStringify(arr, offset);
   if (!validate_default(uuid)) {
     throw TypeError("Stringified UUID is invalid");
   }
@@ -87,7 +90,7 @@ function v1(options, buf, offset) {
   for (let n = 0; n < 6; ++n) {
     b[i + n] = node[n];
   }
-  return buf || stringify_default(b);
+  return buf || unsafeStringify(b);
 }
 var v1_default = v1;
 
@@ -129,15 +132,16 @@ function stringToBytes(str) {
 }
 var DNS = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
 var URL = "6ba7b811-9dad-11d1-80b4-00c04fd430c8";
-function v35_default(name, version2, hashfunc) {
+function v35(name, version2, hashfunc) {
   function generateUUID(value, namespace, buf, offset) {
+    var _namespace;
     if (typeof value === "string") {
       value = stringToBytes(value);
     }
     if (typeof namespace === "string") {
       namespace = parse_default(namespace);
     }
-    if (namespace.length !== 16) {
+    if (((_namespace = namespace) === null || _namespace === void 0 ? void 0 : _namespace.length) !== 16) {
       throw TypeError("Namespace must be array-like (16 iterable integer values, 0-255)");
     }
     let bytes = new Uint8Array(16 + value.length);
@@ -153,7 +157,7 @@ function v35_default(name, version2, hashfunc) {
       }
       return buf;
     }
-    return stringify_default(bytes);
+    return unsafeStringify(bytes);
   }
   try {
     generateUUID.name = name;
@@ -177,11 +181,20 @@ function md5(bytes) {
 var md5_default = md5;
 
 // node_modules/uuid/dist/esm-node/v3.js
-var v3 = v35_default("v3", 48, md5_default);
+var v3 = v35("v3", 48, md5_default);
 var v3_default = v3;
+
+// node_modules/uuid/dist/esm-node/native.js
+import crypto3 from "crypto";
+var native_default = {
+  randomUUID: crypto3.randomUUID
+};
 
 // node_modules/uuid/dist/esm-node/v4.js
 function v4(options, buf, offset) {
+  if (native_default.randomUUID && !buf && !options) {
+    return native_default.randomUUID();
+  }
   options = options || {};
   const rnds = options.random || (options.rng || rng)();
   rnds[6] = rnds[6] & 15 | 64;
@@ -193,24 +206,24 @@ function v4(options, buf, offset) {
     }
     return buf;
   }
-  return stringify_default(rnds);
+  return unsafeStringify(rnds);
 }
 var v4_default = v4;
 
 // node_modules/uuid/dist/esm-node/sha1.js
-import crypto3 from "crypto";
+import crypto4 from "crypto";
 function sha1(bytes) {
   if (Array.isArray(bytes)) {
     bytes = Buffer.from(bytes);
   } else if (typeof bytes === "string") {
     bytes = Buffer.from(bytes, "utf8");
   }
-  return crypto3.createHash("sha1").update(bytes).digest();
+  return crypto4.createHash("sha1").update(bytes).digest();
 }
 var sha1_default = sha1;
 
 // node_modules/uuid/dist/esm-node/v5.js
-var v5 = v35_default("v5", 80, sha1_default);
+var v5 = v35("v5", 80, sha1_default);
 var v5_default = v5;
 
 // node_modules/uuid/dist/esm-node/nil.js
@@ -221,7 +234,7 @@ function version(uuid) {
   if (!validate_default(uuid)) {
     throw TypeError("Invalid UUID");
   }
-  return parseInt(uuid.substr(14, 1), 16);
+  return parseInt(uuid.slice(14, 15), 16);
 }
 var version_default = version;
 export {
