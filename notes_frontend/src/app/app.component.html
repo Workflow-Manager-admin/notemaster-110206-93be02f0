@@ -177,6 +177,13 @@
   }
 </style>
 
+<div style="display: flex; justify-content: flex-end; align-items: center; width: 100%; padding: 0.75rem 1.7rem 0 0;">
+  <dark-mode-toggle
+    [darkMode]="darkMode"
+    (toggle)="onDarkModeToggle($event)"
+  ></dark-mode-toggle>
+</div>
+
 <main class="main">
   <div class="content">
     <div class="left-side">
